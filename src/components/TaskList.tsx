@@ -30,21 +30,21 @@ export function TaskList() {
       }
     ];
 
-    localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
+    process.env.NODE_ENV === 'production' && localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
     setTasks(newTasks);
   }
 
   function handleToggleTaskCompletion(id: number) {
       const newTasks = tasks.map(task => task.id === id ? {...task, isComplete: !task.isComplete} : task);
 
-      localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
+      process.env.NODE_ENV === 'production' && localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
       setTasks(newTasks);
   }
 
   function handleRemoveTask(id: number) {
     const newTasks = tasks.filter(task => task.id !== id);
 
-    localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
+    process.env.NODE_ENV === 'production' && localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
     setTasks(newTasks);
   }
 
