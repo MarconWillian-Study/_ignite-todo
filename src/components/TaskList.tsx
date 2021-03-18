@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import '../styles/tasklist.scss'
 
@@ -22,39 +22,41 @@ export function TaskList() {
     const id = Date.now();
 
     const newTasks: Task[] = [
+        ...tasks,
       {
         id,
         title: newTaskTitle,
         isComplete: false
-      },
-      ...tasks
-    ]
+      }
+    ];
 
+    localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
     setTasks(newTasks);
   }
 
   function handleToggleTaskCompletion(id: number) {
       const newTasks = tasks.map(task => task.id === id ? {...task, isComplete: !task.isComplete} : task);
 
+      localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
       setTasks(newTasks);
   }
 
   function handleRemoveTask(id: number) {
-      
-    const newTasks = tasks.filter(task => task.id === id);
+    const newTasks = tasks.filter(task => task.id !== id);
 
+    localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
     setTasks(newTasks);
   }
 
-//   useEffect(() => {
-//     const tasksStorage = localStorage.getItem('@ignite/todo');
+  useEffect(() => {
+    const tasksStorage = localStorage.getItem('@ignite/todo');
     
-//     if(!tasksStorage){
-//         return ;
-//     };
+    if(!tasksStorage){
+        return ;
+    };
 
-//     setTasks(JSON.parse(tasksStorage) as Task[])
-//   }, [])
+    setTasks(JSON.parse(tasksStorage) as Task[])
+  }, [])
 
   return (
     <section className="task-list container">
