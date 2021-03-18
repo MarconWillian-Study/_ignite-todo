@@ -41,10 +41,20 @@ export function TaskList() {
 
   function handleRemoveTask(id: number) {
       
-    const newTasks = tasks.filter(task => task.id !== id);
+    const newTasks = tasks.filter(task => task.id === id);
 
     setTasks(newTasks);
   }
+
+//   useEffect(() => {
+//     const tasksStorage = localStorage.getItem('@ignite/todo');
+    
+//     if(!tasksStorage){
+//         return ;
+//     };
+
+//     setTasks(JSON.parse(tasksStorage) as Task[])
+//   }, [])
 
   return (
     <section className="task-list container">
