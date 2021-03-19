@@ -15,7 +15,6 @@ export function TaskList() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
-      console.log(newTaskTitle)
     if(!newTaskTitle){
         return ;
     }
@@ -32,6 +31,7 @@ export function TaskList() {
 
     process.env.NODE_ENV !== 'test' && localStorage.setItem('@ignite/todo', JSON.stringify(newTasks));
     setTasks(newTasks);
+    setNewTaskTitle('');
   }
 
   function handleToggleTaskCompletion(id: number) {
@@ -68,6 +68,12 @@ export function TaskList() {
             type="text" 
             placeholder="Adicionar novo todo" 
             onChange={(e) => setNewTaskTitle(e.target.value)}
+            onKeyPress={event => {
+              if (event.key === 'Enter') {
+                handleCreateNewTask()
+              }
+            }}
+
             value={newTaskTitle}
           />
           <button type="submit" data-testid="add-task-button" onClick={handleCreateNewTask}>
