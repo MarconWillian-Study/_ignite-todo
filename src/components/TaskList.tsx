@@ -53,7 +53,7 @@ export function TaskList() {
     
     if(!tasksStorage){
         return ;
-    };
+    }
 
     setTasks(JSON.parse(tasksStorage) as Task[])
   }, [])
