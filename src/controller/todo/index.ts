@@ -23,7 +23,7 @@ interface Todo {
 }
 
 const TodoController = {
-  async index(req, res){
+  async index(request: NextApiRequest, response: NextApiResponse){
 
     const todos = await fauna.query<ResponseListTodo>(
       query.Map(
@@ -41,7 +41,7 @@ const TodoController = {
       return todo.data;
     })
 
-    res.status(200).json(listTodos)
+    response.status(200).json(listTodos)
   },
   async create(request: NextApiRequest, response: NextApiResponse){
     const { title } = request.body as CreateInput;
@@ -71,8 +71,8 @@ const TodoController = {
   edit(req, res){
     res.status(200).json({ name: 'edit todo' })
   },
-  async delete(req, res){
-    const { id } = req.query
+  async delete(request: NextApiRequest, response: NextApiResponse){
+    const { id } = request.query
 
     try {
       await fauna.query(
@@ -89,9 +89,9 @@ const TodoController = {
         )
       )
   
-      res.status(201).send()
+      response.status(201).json({})
     } catch (error) {
-      res.status(400).json({
+      response.status(400).json({
         error: true, 
         message: error.message
       })
