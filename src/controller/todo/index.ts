@@ -8,9 +8,40 @@ interface CreateInput {
   title: string
 }
 
-const todo = {
-  index(req, res){
-    res.status(200).json({ name: 'list todos' })
+interface ResponseListTodo {
+  data: {
+    data: Todo;
+  }[]
+}
+
+interface Todo {
+  id: string;
+  user: number;
+  title: string;
+  status: boolean;
+  createdAt: string;
+}
+
+const TodoController = {
+  async index(req, res){
+
+    const todos = await fauna.query<ResponseListTodo>(
+      query.Map(
+        query.Paginate(
+          query.Match(
+            query.Index('todo_by_user_b'),
+            1
+          )
+        ),
+        query.Lambda("X", query.Get(query.Var("X")))
+      )
+    )
+
+    const listTodos = todos.data.map(todo => {
+      return todo.data;
+    })
+
+    res.status(200).json(listTodos)
   },
   async create(request: NextApiRequest, response: NextApiResponse){
     const { title } = request.body as CreateInput;
@@ -19,6 +50,7 @@ const todo = {
       id: uuid.v4(),
       user: 1,
       title,
+      createdAt: new Date().toISOString(),
       status: false
     };
 
@@ -44,4 +76,4 @@ const todo = {
   } 
 }
 
-export default todo;
+export default TodoController;
