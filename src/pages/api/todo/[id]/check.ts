@@ -1,9 +1,10 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import status from "../../../../controller/todo/status"
 
-export default (req, res) => {
-  if (req.method === 'PUT') {
-    return status.update(req, res, true);
+export default (request: NextApiRequest, response: NextApiResponse) => {
+  if (request.method === 'PUT') {
+    return status.update(request, response, true);
   } else {
-    res.status(400).json({ error: true, message: 'Not allowed!' })
+    response.status(400).json({ error: true, message: 'Not allowed!' })
   }
 }

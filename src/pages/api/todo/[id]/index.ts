@@ -1,12 +1,13 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import todo from "../../../../controller/todo"
 
-export default (req, res) => {
-  if (req.method === 'DELETE') {
-    return todo.delete(req, res);
-  } else if (req.method === 'PATCH') {
-    return todo.edit(req, res);
+export default (request: NextApiRequest, response: NextApiResponse) => {
+  if (request.method === 'DELETE') {
+    return todo.delete(request, response);
+  } else if (request.method === 'PATCH') {
+    return todo.edit(request, response);
   } else {
-    return todo.get(req, res);
+    return todo.get(request, response);
   }
 
 }
