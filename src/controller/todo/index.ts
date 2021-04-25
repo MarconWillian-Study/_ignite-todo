@@ -71,8 +71,31 @@ const TodoController = {
   edit(req, res){
     res.status(200).json({ name: 'edit todo' })
   },
-  delete(req, res){
-    res.status(200).json({ name: 'delete todo' })
+  async delete(req, res){
+    const { id } = req.query
+
+    try {
+      await fauna.query(
+        query.Delete(
+          query.Select(
+            "ref",
+            query.Get(
+              query.Match(
+                query.Index('todo_by_id'),
+                query.Casefold(id)
+              )
+            )
+          )
+        )
+      )
+  
+      res.status(201).send()
+    } catch (error) {
+      res.status(400).json({
+        error: true, 
+        message: error.message
+      })
+    }
   } 
 }
 
